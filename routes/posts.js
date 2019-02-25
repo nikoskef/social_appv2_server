@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/test", (req, res) => res.json({ message: "Posts is working" }));
+const postsController = require("../controllers/posts");
+
+router.get("/test", postsController.getPostsTest);
 
 module.exports = router;
