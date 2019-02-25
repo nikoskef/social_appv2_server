@@ -24,4 +24,10 @@ router.post("/experience", auth, validate(validateExperience), profileController
 
 router.post("/education", auth, validate(validateEducation), profileController.postEducation);
 
+router.delete("/experience/:exp_id", auth, profileController.deleteExperience);
+
+router.delete("/education/:edu_id", auth, profileController.deleteEducation);
+
+router.delete("/", auth, profileController.deleteUserAndProfile);
+
 module.exports = router;

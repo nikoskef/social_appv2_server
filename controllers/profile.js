@@ -123,3 +123,51 @@ exports.postEducation = async (req, res) => {
   await profile.save();
   res.json(profile);
 };
+
+exports.deleteExperience = async (req, res) => {
+  const profile = await Profile.findOne({ user: req.user._id });
+  if (!profile) return res.status(404).json({ message: "There is no profile for this user." });
+
+  const removeIndex = profile.experience.map(item => item.id).indexOf(req.params.exp_id);
+
+  if (removeIndex === -1) {
+    return res.status(404).json({ message: "Specified experience does not exist" });
+  }
+  profile.experience.splice(removeIndex, 1);
+
+  await profile.save();
+  res.json(profile);
+};
+
+exports.deleteExperience = async (req, res) => {
+  const profile = await Profile.findOne({ user: req.user._id });
+  if (!profile) return res.status(404).json({ message: "There is no profile for this user." });
+
+  const isValid = mongoose.Types.ObjectId.isValid(req.params.exp_id);
+  if (!isValid) return res.status(400).json({ message: "Not valid id was given." });
+
+  profile.experience.remove({ _id: req.params.exp_id });
+
+  await profile.save();
+  res.json(profile);
+};
+
+exports.deleteEducation = async (req, res) => {
+  const profile = await Profile.findOne({ user: req.user._id });
+  if (!profile) return res.status(404).json({ message: "There is no profile for this user." });
+
+  const isValid = mongoose.Types.ObjectId.isValid(req.params.edu_id);
+  if (!isValid) return res.status(400).json({ message: "Not valid id was given." });
+
+  profile.education.remove({ _id: req.params.edu_id });
+
+  await profile.save();
+  res.json(profile);
+};
+
+exports.deleteUserAndProfile = async (req, res) => {
+  await Profile.findOneAndRemove({ user: req.user._id });
+  await User.findOneAndRemove({ _id: req.user._id });
+
+  res.json({ message: "Success" });
+};

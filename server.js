@@ -1,13 +1,10 @@
+require("express-async-errors");
 const express = require("express");
 const app = express();
 
 require("./startup/routes")(app);
 require("./startup/db")();
 require("./startup/validation")();
-
-app.get("/", (req, res, next) => {
-  res.send("Hello");
-});
 
 const port = process.env.PORT || 5000;
 
