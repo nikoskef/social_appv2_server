@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
-const keys = require("../config/keys");
+//const keys = require("../config/keys");
 
 const Schema = mongoose.Schema;
 
@@ -38,7 +38,7 @@ const userSchema = new Schema(
 
 userSchema.methods.generateAuthToken = function() {
   const payload = { _id: this._id, name: this.name, avatar: this.avatar };
-  const token = jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 });
+  const token = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: 3600 });
   return token;
 };
 

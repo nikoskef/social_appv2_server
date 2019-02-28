@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const logger = require("../middleware/logger");
 
 module.exports = function() {
-  const db = require("../config/keys").mongoURI;
+  const db = process.env.MONGO_URI; // require("../config/keys").mongoURI;
   mongoose
     .connect(db, { useNewUrlParser: true, useCreateIndex: true })
 
