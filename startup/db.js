@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
+const logger = require("../middleware/logger");
+
 module.exports = function() {
   const db = require("../config/keys").mongoURI;
   mongoose
     .connect(db, { useNewUrlParser: true, useCreateIndex: true })
 
-    .then(() => console.log(`Connected to MongoDB`));
+    .then(() => logger.info(`Connected to MongoDB`));
 };

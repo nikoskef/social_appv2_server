@@ -18,7 +18,7 @@ function validateRegister(user) {
     password2: Joi.any()
       .valid(Joi.ref("password"))
       .required()
-      .options({ language: { any: { allowOnly: "must match password" } } })
+      .options({ language: { any: { allowOnly: "Passwords do not match" } } })
   };
 
   return Joi.validate(user, schema);
