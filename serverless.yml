@@ -1,0 +1,30 @@
+# serverless.yml
+
+service: social_appv2_server
+
+custom:
+  secrets: ${file(secrets.json)}
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: ${self:custom.secrets.NODE_ENV}
+  region: eu-central-1
+  environment:
+    DB: ${self:custom.secrets.DB}
+    JWT_SECRET_KEY: ${self:custom.secrets.JWT_SECRET_KEY}
+
+functions:
+  app:
+    handler: server.run
+    events:
+      - http:
+          path: /
+          method: ANY
+
+      - http:
+          path: /{proxy+}
+          method: ANY
+
+plugins:
+  - serverless-offline
