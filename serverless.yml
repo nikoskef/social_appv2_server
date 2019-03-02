@@ -1,6 +1,6 @@
 # serverless.yml
 
-service: social_appv2_server
+service: social-appv2-server
 
 custom:
   secrets: ${file(secrets.json)}
@@ -8,7 +8,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs8.10
-  stage: ${self:custom.secrets.NODE_ENV}
+  stage: prod
   region: eu-central-1
   environment:
     DB: ${self:custom.secrets.DB}
@@ -21,10 +21,11 @@ functions:
       - http:
           path: /
           method: ANY
+          cors: true
 
       - http:
           path: /{proxy+}
           method: ANY
-
-plugins:
-  - serverless-offline
+          cors: true
+# plugins:
+#   - serverless-offline
