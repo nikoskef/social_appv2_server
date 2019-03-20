@@ -44,13 +44,14 @@ exports.createProfile = async (req, res) => {
   if (githubusername) profileFields.githubusername = githubusername;
 
   //split skills into array
-  if (typeof skills !== "undefined") {
+
+  if (!Array.isArray(skills) && typeof skills !== "undefined") {
     profileFields.skills = skills
       .split(",")
       .map(skill => skill.trim())
       .filter((value, index, array) => array.indexOf(value) === index);
   }
-  // Social
+  //Social
   profileFields.social = {};
   if (youtube) profileFields.social.youtube = youtube;
   if (twitter) profileFields.social.twitter = twitter;

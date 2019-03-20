@@ -5,11 +5,13 @@ function validateLogin(req) {
     email: Joi.string()
       .min(5)
       .max(255)
+      .label("Email")
       .required()
       .email(),
     password: Joi.string()
       .min(5)
       .max(255)
+      .label("Password")
       .required()
   };
 

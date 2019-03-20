@@ -37,7 +37,7 @@ const profileSchema = new Schema(
       maxlength: 255
     },
     skills: {
-      type: [String],
+      type: Array,
       required: true,
       maxlength: 1024
     },

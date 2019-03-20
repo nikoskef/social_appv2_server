@@ -5,21 +5,28 @@ function validateEducation(req) {
     school: Joi.string()
       .min(2)
       .max(255)
+      .label("School")
       .required(),
     degree: Joi.string()
       .min(2)
       .max(255)
+      .label("Degree")
       .required(),
     fieldofstudy: Joi.string()
       .min(2)
       .max(255)
+      .label("Field of Study")
       .required(),
     from: Joi.date()
       .max("now")
+      .label("From Date")
       .required(),
-    to: Joi.date().max("now"),
-    current: Joi.boolean(),
+    to: Joi.date()
+      .max("now")
+      .label("To Date"),
+    current: Joi.boolean().label("Current"),
     description: Joi.string()
+      .label("Description")
       .min(2)
       .max(1024)
   };

@@ -3,3 +3,4 @@ secrets.json
 logfile.log
 uncaughtExceptions.log
 .serverless/
+Dockerfile
