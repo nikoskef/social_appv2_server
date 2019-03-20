@@ -1,5 +1,5 @@
 const { createLogger, format, transports } = require("winston");
-// require("winston-mongodb");
+require("winston-mongodb");
 const { combine, timestamp, printf, colorize, splat } = format;
 
 const myFormat = printf(info => {
@@ -12,11 +12,11 @@ const myFormat = printf(info => {
 const LOG_LEVEL = process.env.LOG_LEVEL || "debug";
 const logger = createLogger({
   transports: [
-    // new transports.MongoDB({
-    //   db: "mongodb://localhost/vidly",
-    //   format: combine(colorize(), timestamp(), splat(), myFormat),
-    //   level: LOG_LEVEL
-    // }),
+    new transports.MongoDB({
+      db: process.env.DB_ERROR,
+      format: combine(colorize(), timestamp(), splat(), myFormat),
+      level: LOG_LEVEL
+    }),
     new transports.File({
       filename: "logfile.log",
       level: LOG_LEVEL,
@@ -31,12 +31,12 @@ const logger = createLogger({
     new transports.File({
       filename: "uncaughtExceptions.log",
       format: combine(colorize(), timestamp(), splat(), myFormat)
+    }),
+    new transports.MongoDB({
+      db: process.env.DB_ERROR,
+      level: "info",
+      format: combine(colorize(), timestamp(), splat(), myFormat)
     })
-    // new transports.MongoDB({
-    //   db: "mongodb://localhost/vidly",
-    //   level: "info",
-    //   format: combine(colorize(), timestamp(), splat(), myFormat)
-    // })
   ]
 });
 module.exports = logger;

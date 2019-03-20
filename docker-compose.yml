@@ -1,0 +1,32 @@
+version: "3.6"
+
+services:
+  # Backend API
+  social-app-api:
+    container_name: api
+    restart: always
+    build: ./
+    command: npm start
+    working_dir: /server
+    environment:
+      DB: mongodb://mongodb/social
+      DB_ERROR: mongodb://mongodb/error
+      JWT_SECRET_KEY: secretJwtKey
+      LOG_LEVEL: info
+      NODE_ENV: production
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/server
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest    
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./:/data
+
+
