@@ -2,6 +2,10 @@ const { createLogger, format, transports } = require("winston");
 require("winston-mongodb");
 const { combine, timestamp, printf, colorize, splat } = format;
 
+const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_HOSTNAME, MONGO_PORT, MONGO_DB_ERROR } = process.env;
+
+const url = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB_ERROR}?authSource=admin`;
+
 const myFormat = printf(info => {
   if (info.meta && info.meta instanceof Error) {
     return `${info.timestamp} ${info.level} ${info.message} : ${info.meta.stack}`;
@@ -13,7 +17,8 @@ const LOG_LEVEL = process.env.LOG_LEVEL || "debug";
 const logger = createLogger({
   transports: [
     new transports.MongoDB({
-      db: process.env.DB_ERROR,
+      db: url,
+      useNewUrlParser: true,
       format: combine(colorize(), timestamp(), splat(), myFormat),
       level: LOG_LEVEL
     }),
@@ -33,8 +38,8 @@ const logger = createLogger({
       format: combine(colorize(), timestamp(), splat(), myFormat)
     }),
     new transports.MongoDB({
-      db: process.env.DB_ERROR,
-      level: "info",
+      db: url,
+      level: LOG_LEVEL,
       format: combine(colorize(), timestamp(), splat(), myFormat)
     })
   ]

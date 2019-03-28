@@ -27,6 +27,7 @@
     "winston-mongodb": "^4.0.3"
   },
   "devDependencies": {
+    "nodemon": "^1.18.10",
     "serverless-offline": "^4.7.1"
   }
 }

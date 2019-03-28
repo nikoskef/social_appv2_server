@@ -1,32 +1,51 @@
 version: "3.6"
 
 services:
-  # Backend API
   social-app-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nodejs
     container_name: api
-    restart: always
-    build: ./
-    command: npm start
-    working_dir: /server
+    restart: unless-stopped
+    env_file: .env
     environment:
-      DB: mongodb://mongodb/social
-      DB_ERROR: mongodb://mongodb/error
-      JWT_SECRET_KEY: secretJwtKey
-      LOG_LEVEL: info
-      NODE_ENV: production
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=db
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
+      - MONGO_DB=$MONGO_DB_ERROR
+      - JWT_SECRET_KEY=$JWT_SECRET_KEY
+      - LOG_LEVEL=$LOG_LEVEL
     ports:
       - "5000:5000"
     volumes:
-      - ./:/server
+      - .:/home/node/server
+      - node_modules:/home/node/server/node_modules
+    networks:
+      - app-network
+    command: ./wait-for.sh db:27017 -- /home/node/server/node_modules/.bin/nodemon server.js
     depends_on:
-      - mongodb
+      - db
 
-  mongodb:
-    image: mongo:latest    
-    restart: always
-    ports:
-      - "27017:27017"
+  db:
+    image: mongo:4.1.9-xenial
+    container_name: db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
     volumes:
-      - ./:/data
+      - dbdata:/data/db
+    networks:
+      - app-network
 
+networks:
+  app-network:
+    driver: bridge
 
+volumes:
+  dbdata:
+  node_modules:
